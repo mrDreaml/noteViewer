@@ -1,21 +1,30 @@
 <template>
-  <li class="todoItem">
+  <li :class="['todoItem', { completed: todoItem.isDone}]">
     <div class="noteControls">
-      <div class="checkBoxWrapper">
+      <div
+        v-if="mode===noteModes.editTodoList"
+        class="checkBoxWrapper"
+      >
         <CheckBox
-          :is-selected="isSelected"
+          :is-selected="todoItem.isDone"
           @on-change="toggleDoneStatus"
         />
       </div>
       <strong class="noteIndex">
-        1.
+        {{ `${itemNumber}.` }}
       </strong>
     </div>
     <span class="noteText">
       {{ todoItem.text }}
     </span>
-    <div class="noteControls">
-      <button class="deleteBtn">
+    <div
+      v-if="mode===noteModes.editTodoList"
+      class="noteControls"
+    >
+      <button
+        class="deleteBtn"
+        @click="$emit('removeItem', todoItem.id)"
+      >
         &times;
       </button>
     </div>
@@ -23,6 +32,7 @@
 </template>
 
 <script>
+import NOTE_MODE from '@/constants/noteMode';
 import CheckBox from '@/components/Checkbox';
 
 export default {
@@ -30,6 +40,14 @@ export default {
         CheckBox,
     },
     props: {
+        mode: {
+            type: String,
+            default: '',
+        },
+        itemNumber: {
+            type: Number,
+            default: 1,
+        },
         todoItem: {
             type: Object,
             default () {
@@ -37,9 +55,14 @@ export default {
             },
         },
     },
+    data () {
+        return {
+            noteModes: NOTE_MODE,
+        };
+    },
     methods: {
         toggleDoneStatus () {
-
+            this.$emit('toggleDoneStatus', this.todoItem.id);
         }
     }
 };
@@ -49,7 +72,16 @@ export default {
 .todoItem {
     display: flex;
     justify-content: space-between;
-    padding: 5px 0;
+    padding: 5px 10px;
+    margin: 3px 0;
+    border-bottom: 1px solid #eee;
+
+  &.completed {
+    color: #3c3;
+    .noteText {
+      text-decoration-line: line-through;
+    }
+  }
 
     .noteText {
         width: 100%;
@@ -83,7 +115,7 @@ export default {
     height: 18px;
 
     &:hover {
-        background: #eee;
+      color: #f00;
     }
 
     &:focus {

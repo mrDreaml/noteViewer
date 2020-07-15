@@ -32,7 +32,7 @@ export default {
         height: 100%;
         display: flex;
         border: none;
-        background: #eee;
+        background: #eeeeeecc;
         padding: 0;
         border-radius: 5px;
 
@@ -43,10 +43,6 @@ export default {
             &:hover {
                 background-color: #afa;
             }
-        }
-
-        &:hover {
-            background-color: #ded;
         }
 
         &:focus {

@@ -7,8 +7,8 @@ export default [
         component: AllNotes,
     },
     {
-        path: '/about',
-        name: 'About',
+        path: '/editNote',
+        name: 'Edit Note',
         component: () => import('@/views/About.vue'),
     },
 ];
