@@ -4,10 +4,9 @@
       <Note
         v-for="note in notes"
         :key="note.noteTitle"
+        :todo-list-items-limit="todoListItemsLimit"
         :note="note"
         :mode="mode"
-        @deleteNote="deleteNote"
-        @goToNote="goToNote"
       />
     </div>
   </div>
@@ -24,22 +23,19 @@ export default {
     },
     data () {
         return {
-            notes: this.$store.state.notesList,
             mode: NOTE_MODE.editNote,
+            todoListItemsLimit: 5,
         };
     },
-    methods: {
-        deleteNote (id) {
-            this.notes = this.notes.filter(note => note.id !== id);
-        } ,
-        goToNote (id) {
-            this.$router.push({ path: 'editNote', query: { id } });
+    computed: {
+        notes () {
+            return this.$store.getters.getNotesList();
         }
     },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .noteWrapper {
     width: 300px;
   }

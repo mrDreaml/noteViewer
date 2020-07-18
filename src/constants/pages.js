@@ -9,6 +9,6 @@ export default [
     {
         path: '/editNote',
         name: 'Edit Note',
-        component: () => import('@/views/About.vue'),
+        component: () => import('@/views/EditNote'),
     },
 ];

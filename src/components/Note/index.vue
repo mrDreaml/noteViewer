@@ -5,22 +5,29 @@
     </h2>
     <ul class="todoList">
       <TodoItem
-        v-for="(todoItem, index) in note.todoList"
+        v-for="(todoItem, index) in $options.filters.limitTodoItems(note.todoList, todoListItemsLimit)"
         :key="`todoItem-${index}-${todoItem.text}`"
+        :note-id="note.id"
         :todo-item="todoItem"
         :item-number="index + 1"
-        :mode="note.mode"
+        :mode="mode"
         @toggleDoneStatus="toggleDoneStatus"
         @removeItem="removeItem"
       />
     </ul>
+    <span
+      v-if="mode===noteModes.editNote && note.todoList.length > todoListItemsLimit"
+      class="markIsFullList"
+    >
+      list shortened
+    </span>
     <div
       v-if="mode===noteModes.editNote"
       class="controls"
     >
       <button
         class="editButton"
-        @click="$emit('goToNote', note.id)"
+        @click="goToNote(note.id)"
       >
         <img
           alt="edit"
@@ -29,7 +36,7 @@
       </button>
       <button
         class="deleteButton"
-        @click="$emit('deleteNote', note.id)"
+        @click="removeNote(note.id)"
       >
         <img
           alt="delete"
@@ -51,11 +58,25 @@ export default {
     components: {
         TodoItem,
     },
+    filters: {
+        limitTodoItems (todoItemsList, limit) {
+            if (Number.isInteger(limit)) {
+                return todoItemsList.slice(0, limit);
+            }
+            return todoItemsList;
+        }
+    },
     props: {
         note: {
             type: Object,
             default () {
                 return {};
+            }
+        },
+        todoListItemsLimit: {
+            type: [ Number, Boolean ],
+            default () {
+                return false;
             }
         },
         mode: String,
@@ -69,11 +90,16 @@ export default {
     },
     methods: {
         toggleDoneStatus (id) {
-            const currentItem = this.todoList.find(todoListItem => todoListItem.id === id);
-            currentItem.isDone = !currentItem.isDone;
+            this.$store.commit('toggleDoneStatus', { noteId: this.note.id, todoId: id });
         },
         removeItem (id) {
-            this.todoList = this.todoList.filter(todoListItem => todoListItem.id !== id);
+            this.$store.commit('removeTodoItem', { noteId: this.note.id, todoId: id });
+        },
+        removeNote (id) {
+            this.$store.commit('removeNote', { noteId: id });
+        } ,
+        goToNote (id) {
+            this.$router.push({ path: 'editNote', query: { id } });
         }
     }
 };
@@ -85,12 +111,19 @@ export default {
     width: 100%;
     height: 100%;
     padding: 10px 0;
+    border: 1px solid #eee;
     border-radius: 15px;
-    box-shadow: 1px 1px 3px #dddddd;
+    box-shadow: 1px 1px 3px #00000011;
 
     .noteTitle {
       margin-top: 0;
       font-size: 1em;
+    }
+
+    .markIsFullList {
+      font-size: .7em;
+      font-style: italic;
+      color: #49F;
     }
   }
 
