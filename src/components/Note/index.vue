@@ -1,8 +1,12 @@
 <template>
   <div class="note">
-    <h2 class="noteTitle">
-      {{ note.noteTitle }}
-    </h2>
+    <div class="noteTitle">
+      <EditableText
+        :value="note.noteTitle"
+        :validation-rule="noteTitleValidationRule"
+        @updateValue="updateTitleText"
+      />
+    </div>
     <ul class="todoList">
       <TodoItem
         v-for="(todoItem, index) in $options.filters.limitTodoItems(note.todoList, todoListItemsLimit)"
@@ -48,8 +52,11 @@
 </template>
 
 <script>
+import { TITLE_CREATOR_RULES } from '@/constants/validationRules';
 import NOTE_MODE from '@/constants/noteMode';
+
 import TodoItem from '@/components/TodoItem';
+import EditableText from '@/components/EditableText';
 
 import editIcon from '@/assets/icons/edit.svg';
 import deleteIcon from '@/assets/icons/xIcon.svg';
@@ -57,6 +64,7 @@ import deleteIcon from '@/assets/icons/xIcon.svg';
 export default {
     components: {
         TodoItem,
+        EditableText,
     },
     filters: {
         limitTodoItems (todoItemsList, limit) {
@@ -83,12 +91,16 @@ export default {
     },
     data () {
         return {
+            noteTitleValidationRule: TITLE_CREATOR_RULES,
+            noteModes: NOTE_MODE,
             editIcon,
             deleteIcon,
-            noteModes: NOTE_MODE,
         };
     },
     methods: {
+        updateTitleText (noteTitle) {
+            this.$store.commit('updateNoteTitle', { noteId: this.note.id, noteTitle });
+        },
         toggleDoneStatus (id) {
             this.$store.commit('toggleDoneStatus', { noteId: this.note.id, todoId: id });
         },
@@ -116,8 +128,26 @@ export default {
     box-shadow: 1px 1px 3px #00000011;
 
     .noteTitle {
+      display: flex;
       margin-top: 0;
-      font-size: 1em;
+
+      .editableText {
+        width: 100%;
+        font-weight: bold;
+        font-size: 1em;
+        text-align: center;
+      }
+
+      .editableInput {
+        margin: 0 10px;
+        width: 100%;
+        border: none;
+        border-radius: 5px;
+        box-shadow: inset 0 0 3px #4499FF;
+        font-weight: bold;
+        font-size: 1em;
+        text-align: center;
+      }
     }
 
     .markIsFullList {

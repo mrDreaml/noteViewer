@@ -14,28 +14,21 @@
         {{ `${itemNumber}.` }}
       </strong>
     </div>
-    <span
-      v-if="!isEditMode"
-      class="noteText"
-      @dblclick="toggleEditText"
-    >
-      {{ todoItem.text }}
-    </span>
-    <input
-      v-else
-      ref="inputEditText"
-      v-model="inputEditText"
-      class="noteInput"
-      type="text"
-      @keydown="editModeOnKeyDown"
-    >
+    <div class="todoEditableTextWrapper">
+      <EditableText
+        ref="editableTextTodo"
+        :value="todoItem.text"
+        :validation-rule="todoTextValidationRule"
+        @updateValue="updateTodoText"
+      />
+    </div>
     <div
       v-if="mode===noteModes.editTodoList"
       class="noteControls"
     >
       <button
         class="editButton"
-        @click="toggleEditText"
+        @click="toggleTodoTextEditMode"
       >
         <img
           :src="editIcon"
@@ -58,7 +51,8 @@
 <script>
 import { TODO_CREATOR_RULES } from '@/constants/validationRules';
 import NOTE_MODE from '@/constants/noteMode';
-import { validateText } from '@/utils/validator';
+
+import EditableText from '@/components/EditableText';
 import CheckBox from '@/components/Checkbox';
 
 import editIcon from '@/assets/icons/edit.svg';
@@ -67,6 +61,7 @@ import deleteIcon from '@/assets/icons/xIcon.svg';
 export default {
     components: {
         CheckBox,
+        EditableText,
     },
     props: {
         noteId: String,
@@ -87,54 +82,21 @@ export default {
     },
     data () {
         return {
-            isEditMode: false,
-            inputEditText: this.todoItem.text,
+            todoTextValidationRule: TODO_CREATOR_RULES,
             noteModes: NOTE_MODE,
             editIcon,
             deleteIcon,
         };
     },
-    updated () {
-        this.$nextTick(function () {
-            this.isEditMode && this.$refs.inputEditText && this.$refs.inputEditText.focus();
-        });
-    },
     methods: {
-        updateTodoText () {
-            const { isValid, errorMessage } = validateText(TODO_CREATOR_RULES, this.inputEditText);
-            if (isValid) {
-                this.$store.commit('updateTodoItemText',
-                    { noteId: this.noteId, todoId: this.todoItem.id, text: this.inputEditText }
-                );
-                this.isEditMode = !this.isEditMode;
-            } else {
-                console.warn(`validation failed: ${errorMessage}`);
-                this.resetTodoText();
-            }
+        updateTodoText (text) {
+            this.$store.commit('updateTodoItemText',
+                { noteId: this.noteId, todoId: this.todoItem.id, text }
+            );
         },
-        resetTodoText () {
-            this.inputEditText = this.todoItem.text;
-            this.isEditMode = !this.isEditMode;
+        toggleTodoTextEditMode () {
+            this.$refs.editableTextTodo.toggleEditText();
         },
-        editModeOnKeyDown (event) {
-            switch (event.code) {
-                case 'Escape': {
-                    this.resetTodoText();
-                    break;
-                }
-                case 'Enter': {
-                    this.updateTodoText();
-                    break;
-                }
-            }
-        },
-        toggleEditText () {
-            if (this.isEditMode) {
-                this.updateTodoText();
-            } else {
-                this.resetTodoText();
-            }
-        }
     }
 };
 </script>
@@ -149,27 +111,31 @@ export default {
 
   &.completed {
     color: #3c3;
-    .noteText {
+    .editableText {
       text-decoration-line: line-through;
     }
   }
 
-  .noteText, .noteInput {
+  .todoEditableTextWrapper {
     width: 100%;
-    padding: 0 15px;
-  }
+    display: flex;
+    .editableText, .editableInput {
+      width: 100%;
+      padding: 0 15px;
+    }
 
-  .noteText {
+    .editableText {
       text-align: left;
-  }
+    }
 
-  .noteInput {
-    margin: 0 10px;
-    border-radius: 10px;
-    font-size: 1em;
-    border: none;
-    box-shadow: inset 0 0 3px #4499FF;
+    .editableInput {
+      margin: 0 10px;
+      border-radius: 5px;
+      font-size: 1em;
+      border: none;
+      box-shadow: inset 0 0 3px #4499FF;
 
+    }
   }
 
     .noteControls {

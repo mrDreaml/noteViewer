@@ -12,9 +12,15 @@ const store = new Vuex.Store({
         notesList: [
             {
                 id: '1',
-                noteTitle: 'note title',
+                noteTitle: 'todo for project',
                 todoList: [
-                    { id: '1', text: 'some text 1', isDone: false },
+                    { id: '1', text: 'add note functionality', isDone: false },
+                    { id: '2', text: 'delete page', isDone: false },
+                    { id: '3', text: 'add modal, ask before delete', isDone: false },
+                    { id: '4', text: 'add history, ctrl + z, ctrl + shift + z', isDone: false },
+                    { id: '5', text: 'adaptive design', isDone: false },
+                    { id: '6', text: 'add component text / input', isDone: true },
+                    { id: '7', text: 'short view', isDone: false },
                 ],
             }
         ],
@@ -26,6 +32,10 @@ const store = new Vuex.Store({
         addTodo (state, { noteId, text }) {
             const note = this.getters.getNoteById(noteId);
             note.todoList.push({ id: uuid(), text, isDone: false });
+        },
+        updateNoteTitle (state, { noteId, noteTitle }) {
+            const note = this.getters.getNoteById(noteId);
+            note.noteTitle = noteTitle;
         },
         toggleDoneStatus (state, { noteId, todoId }) {
             const note = this.getters.getNoteById(noteId);
