@@ -105,10 +105,10 @@ export default {
             this.$store.commit('toggleDoneStatus', { noteId: this.note.id, todoId: id });
         },
         removeItem (id) {
-            this.$store.commit('removeTodoItem', { noteId: this.note.id, todoId: id });
+            this.$store.dispatch('deleteTodoItemRequest', { noteId: this.note.id, todoId: id });
         },
         removeNote (id) {
-            this.$store.commit('removeNote', { noteId: id });
+            this.$store.dispatch('deleteNoteItemRequest', { noteId: id });
         } ,
         goToNote (id) {
             this.$router.push({ path: 'editNote', query: { id } });

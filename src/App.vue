@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+    <Modal v-if="isOpenedModal" />
     <header>
       <div class="logoWrapper">
         <img
@@ -27,12 +28,22 @@ import * as R from 'ramda';
 import logoImg from '@/assets/logo.png';
 import pages from '@/constants/pages';
 
+import Modal from '@/components/Modal';
+
 export default {
+    components: {
+        Modal,
+    },
     data () {
         return {
             logoImg,
             mainLinks: pages.filter(R.prop('isVisibleAtHeader')),
         };
+    },
+    computed: {
+        isOpenedModal () {
+            return this.$store.state.modal.isOpened;
+        }
     }
 };
 </script>

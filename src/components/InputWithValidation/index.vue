@@ -44,7 +44,7 @@ export default {
                 return;
             }
             this.$emit('onSubmit', this.titleText);
-            this.todoText = '';
+            this.titleText = '';
             this.validationMessage = '';
         },
     }
