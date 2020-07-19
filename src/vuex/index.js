@@ -14,20 +14,20 @@ const store = new Vuex.Store({
                 id: '1',
                 noteTitle: 'todo for project',
                 todoList: [
-                    { id: '1', text: 'add note functionality', isDone: false },
-                    { id: '2', text: 'delete page', isDone: false },
+                    { id: '1', text: 'add note functionality', isDone: true },
+                    { id: '2', text: 'delete page', isDone: true },
                     { id: '3', text: 'add modal, ask before delete', isDone: false },
                     { id: '4', text: 'add history, ctrl + z, ctrl + shift + z', isDone: false },
                     { id: '5', text: 'adaptive design', isDone: false },
                     { id: '6', text: 'add component text / input', isDone: true },
-                    { id: '7', text: 'short view', isDone: false },
+                    { id: '7', text: 'short view', isDone: true },
                 ],
             }
         ],
     },
     mutations: {
-        addNote (state, note) {
-            state.notesList.push(note);
+        addNote (state, { noteTitle }) {
+            state.notesList.push({ id: uuid(), noteTitle, todoList: [] });
         },
         addTodo (state, { noteId, text }) {
             const note = this.getters.getNoteById(noteId);

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NoteCreator />
     <div class="noteWrapper">
       <Note
         v-for="note in notes"
@@ -13,13 +14,16 @@
 </template>
 
 <script>
-import Note from '@/components/Note';
 import NOTE_MODE from '@/constants/noteMode';
+
+import Note from '@/components/Note';
+import NoteCreator from '@/components/NoteCreator';
 
 export default {
     name: 'AllNotes',
     components: {
         Note,
+        NoteCreator,
     },
     data () {
         return {

@@ -1,7 +1,7 @@
 <template>
   <InputWithValidation
     :validation-rules="validationRules"
-    placeholder="add todo"
+    placeholder="add note"
     @onSubmit="onSubmit"
   />
 </template>
@@ -14,9 +14,6 @@ export default {
     components: {
         InputWithValidation
     },
-    props: {
-        noteId: String,
-    },
     data: function () {
         return {
             titleText: '',
@@ -24,9 +21,13 @@ export default {
         };
     },
     methods: {
-        onSubmit (text) {
-            this.$store.commit('addTodo', { noteId: this.noteId, text });
+        onSubmit (value) {
+            this.$store.commit('addNote', { noteTitle: value });
         }
     }
 };
 </script>
+
+<style lang="scss" scoped>
+
+</style>

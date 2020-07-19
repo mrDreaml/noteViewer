@@ -4,7 +4,7 @@
     class="editableText"
     @dblclick="toggleEditText"
   >
-    {{ value }}
+    {{ value | cutValue(cutTextValue) }}
   </span>
   <input
     v-else
@@ -18,9 +18,17 @@
 
 <script>
 import { validateText } from '@/utils/validator';
+import { makeShortValue } from '@/utils/shortValue';
 
 export default {
+    filters: {
+        cutValue (value, length) {
+            return length !== -1 ? makeShortValue(value, length) : value;
+        },
+    },
     props: {
+        isEditAvailable: Boolean,
+        cutTextValue: Number,
         value: String,
         validationRule: {
             type: Object,
@@ -41,6 +49,9 @@ export default {
         });
     },
     methods: {
+        toggleEditMode () {
+            this.isEditMode = !this.isEditMode;
+        },
         updateTodoText () {
             const { isValid, errorMessage } = validateText(this.validationRule, this.inputEditText);
             if (isValid) {
@@ -68,15 +79,14 @@ export default {
             }
         },
         toggleEditText () {
-            if (this.isEditMode) {
-                this.updateTodoText();
-            } else {
-                this.resetTodoText();
+            if (this.isEditAvailable) {
+                if (this.isEditMode) {
+                    this.updateTodoText();
+                } else {
+                    this.resetTodoText();
+                }
             }
         },
-        toggleEditMode () {
-            this.isEditMode = !this.isEditMode;
-        }
     }
 };
 </script>

@@ -19,6 +19,8 @@
         ref="editableTextTodo"
         :value="todoItem.text"
         :validation-rule="todoTextValidationRule"
+        :is-edit-available="mode===noteModes.editTodoList"
+        :cut-text-value="mode===noteModes.editTodoList ? -1 : 25"
         @updateValue="updateTodoText"
       />
     </div>

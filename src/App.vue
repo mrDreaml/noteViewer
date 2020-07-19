@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import * as R from 'ramda';
 import logoImg from '@/assets/logo.png';
 import pages from '@/constants/pages';
 
@@ -30,7 +31,7 @@ export default {
     data () {
         return {
             logoImg,
-            mainLinks: pages,
+            mainLinks: pages.filter(R.prop('isVisibleAtHeader')),
         };
     }
 };
