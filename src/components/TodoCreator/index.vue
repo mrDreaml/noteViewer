@@ -9,6 +9,7 @@
 <script>
 import { TITLE_CREATOR_RULES } from '@/constants/validationRules';
 import InputWithValidation from '@/components/InputWithValidation';
+import { addTodo } from '@/vuex/modules/note';
 
 export default {
     components: {
@@ -25,7 +26,7 @@ export default {
     },
     methods: {
         onSubmit (text) {
-            this.$store.commit('addTodo', { noteId: this.noteId, text });
+            this.$store.commit(addTodo, { noteId: this.noteId, text });
         }
     }
 };

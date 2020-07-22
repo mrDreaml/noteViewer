@@ -4,6 +4,7 @@
       <EditableText
         :value="note.noteTitle"
         :validation-rule="noteTitleValidationRule"
+        :is-edit-available="mode===noteModes.editTodoList"
         @updateValue="updateTitleText"
       />
     </div>
@@ -60,6 +61,8 @@ import EditableText from '@/components/EditableText';
 
 import editIcon from '@/assets/icons/edit.svg';
 import deleteIcon from '@/assets/icons/xIcon.svg';
+import { toggleDoneStatus, updateNoteTitle } from '@/vuex/modules/note';
+import { deleteNoteItemRequest, deleteTodoItemRequest } from '@/vuex';
 
 export default {
     components: {
@@ -99,16 +102,16 @@ export default {
     },
     methods: {
         updateTitleText (noteTitle) {
-            this.$store.commit('updateNoteTitle', { noteId: this.note.id, noteTitle });
+            this.$store.commit(updateNoteTitle, { noteId: this.note.id, noteTitle });
         },
         toggleDoneStatus (id) {
-            this.$store.commit('toggleDoneStatus', { noteId: this.note.id, todoId: id });
+            this.$store.commit(toggleDoneStatus, { noteId: this.note.id, todoId: id });
         },
         removeItem (id) {
-            this.$store.dispatch('deleteTodoItemRequest', { noteId: this.note.id, todoId: id });
+            this.$store.dispatch(deleteTodoItemRequest, { noteId: this.note.id, todoId: id });
         },
         removeNote (id) {
-            this.$store.dispatch('deleteNoteItemRequest', { noteId: id });
+            this.$store.dispatch(deleteNoteItemRequest, { noteId: id });
         } ,
         goToNote (id) {
             this.$router.push({ path: 'editNote', query: { id } });
@@ -119,9 +122,7 @@ export default {
 
 <style lang="scss" scoped>
   .note {
-    position: relative;
     width: 100%;
-    height: 100%;
     padding: 10px 0;
     border: 1px solid #eee;
     border-radius: 15px;

@@ -6,6 +6,7 @@
 
 <script>
 import DeleteModal from './components/deleteModal';
+import { closeModal } from '@/vuex/modules/modal';
 
 const ModalContent = DeleteModal;
 export default {
@@ -19,7 +20,7 @@ export default {
                 const [ actionType, payload ] = answer;
                 this.$store.commit(actionType, payload);
             }
-            this.$store.commit('closeModal');
+            this.$store.commit(closeModal);
         }
     }
 };
