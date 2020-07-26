@@ -1,5 +1,6 @@
 # Notes Viewer
 
+deploy: https://dazzling-mcnulty-bc0561.netlify.app/
 
 to start: `npm run dev`
 
