@@ -3,7 +3,7 @@
 
 to start: `npm run dev`
 
-##Abilities:
+## Abilities:
 * create note
 * edit note
 * delete note
@@ -17,5 +17,5 @@ history works bad, need to update logic, but i have no time to do it
 * adaptive design (not so well)
 
 
-##Advanced features:
+## Advanced features:
 * double click to caption for edit mode
