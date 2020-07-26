@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import note from './modules/note';
-import history, {restoreStateByHistory} from './modules/history';
+import history, { restoreStateByHistory } from './modules/history';
 import modal, { openModal } from './modules/modal';
+import { setStorageData } from '@/utils/storage';
+import { removeNoteAction, removeTodoItemAction } from '@/vuex/modules/note';
 
 Vue.use(Vuex);
 
@@ -19,14 +21,14 @@ const store = new Vuex.Store({
         [deleteTodoItemRequest]: function ({ commit, state }, payload) {
             commit(openModal, {
                 answer: {
-                    approved: [ 'removeTodoItemAction', payload ],
+                    approved: [ removeTodoItemAction, payload ],
                 }
             });
         },
         [deleteNoteItemRequest]: function ({ commit, state }, payload) {
             commit(openModal, {
                 answer: {
-                    approved: [ 'removeNoteAction', payload ],
+                    approved: [ removeNoteAction, payload ],
                 }
             });
         },
@@ -34,6 +36,7 @@ const store = new Vuex.Store({
             Object.entries(historyPayload).forEach(([ key, value ]) => {
                 state[key] = value;
             });
+            setStorageData(state.note);
         },
     }
 });
