@@ -22,7 +22,8 @@
     "@babel/polyfill": "~7.2",
     "ramda": "^0.27.0",
     "vue": "~2.6",
-    "vue-router": "~3.0"
+    "vue-router": "~3.0",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "@babel/core": "~7.2",
