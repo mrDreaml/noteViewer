@@ -1,11 +1,15 @@
+import * as R from 'ramda';
 import { v4 as uuid } from 'uuid';
 import * as noteGetters from './getters';
+import { addHistory } from '@/vuex/modules/history';
 
 export const addNote = 'addNote';
 export const addTodo = 'addTodo';
+export const addTodoAction = 'addTodoAction';
 export const updateNoteTitle = 'updateNoteTitle';
 export const toggleDoneStatus = 'toggleDoneStatus';
 export const removeTodoItem = 'removeTodoItem';
+export const removeTodoItemAction = 'removeTodoItemAction';
 export const updateTodoItemText = 'updateTodoItemText';
 export const removeNote = 'removeNote';
 
@@ -56,7 +60,17 @@ const noteModule = {
             todoItem.text = text;
         },
         [removeNote]: function (state, { noteId }) {
-            this.state.note.notesList = this.getters.getNotesList().filter(note => note.id !== noteId);
+            this.state.note.notesList = this.getters.getNotesList.filter(note => note.id !== noteId);
+        },
+    },
+    actions: {
+        [removeTodoItemAction]: function ({ state, commit, dispatch }, payload) {
+            dispatch(`history/${addHistory}`, { note: { notesList: R.clone(state.notesList) } });
+            commit(removeTodoItem, payload);
+        },
+        [addTodoAction]: function ({ state, commit, dispatch }, payload) {
+            dispatch(`history/${addHistory}`, { note: { notesList: R.clone(state.notesList) } });
+            commit(addTodo, payload);
         },
     },
     getters: {

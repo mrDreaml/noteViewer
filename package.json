@@ -1,6 +1,6 @@
 {
   "name": "notes-viewer",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "amazing app for creating, editing your notes",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --progress",

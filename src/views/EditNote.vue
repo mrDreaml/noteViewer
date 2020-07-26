@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!isNoSelectedNote"
+    v-if="note"
     class="noteWrapper"
   >
     <TodoCreator :note-id="note.id" />
@@ -30,16 +30,17 @@ export default {
         TodoCreator,
     },
     data () {
-        const query = R.path([ 'history', 'current', 'query' ], this.$router);
-        const id = R.prop('id', query);
-        const data = { isNoSelectedNote: false, mode: NOTE_MODE.editTodoList, note: {} };
-        if (id) {
-            data.note = this.$store.getters.getNoteById(id);
-        } else {
-            data.isNoSelectedNote = true;
-        }
-        return data;
-    }
+        return {
+            mode: NOTE_MODE.editTodoList,
+        };
+    },
+    computed: {
+        note () {
+            const query = R.path([ 'history', 'current', 'query' ], this.$router);
+            const id = R.prop('id', query);
+            return this.$store.getters.getNoteById(id);
+        },
+    },
 };
 </script>
 

@@ -18,7 +18,7 @@ export default {
             const answer = this.$store.getters.getModalAnswerData(value);
             if (answer) {
                 const [ actionType, payload ] = answer;
-                this.$store.commit(actionType, payload);
+                this.$store.dispatch(actionType, payload);
             }
             this.$store.commit(closeModal);
         }

@@ -39,8 +39,8 @@ export default {
     },
     computed: {
         notes () {
-            return this.$store.getters.getNotesList();
-        }
+            return this.$store.getters.getNotesList;
+        },
     },
 };
 </script>

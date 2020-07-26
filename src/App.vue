@@ -29,6 +29,7 @@ import logoImg from '@/assets/logo.png';
 import pages from '@/constants/pages';
 
 import Modal from '@/components/Modal';
+import { rollBack, rollBackToFuture } from '@/vuex/modules/history';
 
 export default {
     components: {
@@ -44,7 +45,22 @@ export default {
         isOpenedModal () {
             return this.$store.state.modal.isOpened;
         }
-    }
+    },
+    created () {
+        document.addEventListener('keydown', this.globalKeyHandler);
+    },
+    beforeDestroy () {
+        window.removeEventListener('keydown', this.globalKeyHandler);
+    },
+    methods: {
+        globalKeyHandler (event) {
+            if (event.ctrlKey && event.shiftKey && event.keyCode === 90) {
+                this.$store.dispatch(`history/${rollBackToFuture}`);
+            } else if (event.ctrlKey && event.keyCode === 90) {
+                this.$store.dispatch(`history/${rollBack}`);
+            }
+        },
+    },
 };
 </script>
 
